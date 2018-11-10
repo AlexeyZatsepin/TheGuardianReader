@@ -1,4 +1,4 @@
-package com.example.azatsepin.theguardianreader.persistent;
+package com.example.azatsepin.theguardianreader.datasource;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;

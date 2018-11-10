@@ -5,8 +5,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.azatsepin.theguardianreader.model.Article;
-import com.example.azatsepin.theguardianreader.persistent.AppDatabase;
-import com.example.azatsepin.theguardianreader.persistent.ArticleDao;
+import com.example.azatsepin.theguardianreader.datasource.AppDatabase;
+import com.example.azatsepin.theguardianreader.datasource.ArticleDao;
 
 import org.junit.After;
 import org.junit.Before;

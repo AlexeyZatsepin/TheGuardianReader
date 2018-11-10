@@ -4,8 +4,8 @@ import android.app.Application;
 import android.arch.persistence.room.Room;
 
 import com.example.azatsepin.theguardianreader.api.GuardianApi;
-import com.example.azatsepin.theguardianreader.persistent.AppDatabase;
-import com.example.azatsepin.theguardianreader.persistent.ArticleDao;
+import com.example.azatsepin.theguardianreader.datasource.AppDatabase;
+import com.example.azatsepin.theguardianreader.datasource.ArticleDao;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

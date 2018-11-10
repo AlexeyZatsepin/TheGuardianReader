@@ -5,16 +5,14 @@ import android.arch.paging.PagedListAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.example.azatsepin.theguardianreader.model.Article;
-import com.example.azatsepin.theguardianreader.persistent.NetworkDataSource;
+import com.example.azatsepin.theguardianreader.datasource.NetworkDataSource;
 import com.example.azatsepin.theguardianreader.utils.ArticleDiffUtilsCallback;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
