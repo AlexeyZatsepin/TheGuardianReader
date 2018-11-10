@@ -17,7 +17,7 @@ public class SingleResponse {
     private Integer total;
     @SerializedName("content")
     @Expose
-    private Content content;
+    private Article content;
 
     public String getStatus() {
         return status;
@@ -43,11 +43,11 @@ public class SingleResponse {
         this.total = total;
     }
 
-    public Content getContent() {
+    public Article getContent() {
         return content;
     }
 
-    public void setContent(Content content) {
+    public void setContent(Article content) {
         this.content = content;
     }
 
