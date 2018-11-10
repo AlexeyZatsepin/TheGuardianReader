@@ -35,7 +35,7 @@ public class ListResponse {
     private String orderBy;
     @SerializedName("results")
     @Expose
-    private List<Result> results = null;
+    private List<Article> results = null;
 
     public String getStatus() {
         return status;
@@ -69,7 +69,7 @@ public class ListResponse {
         return orderBy;
     }
 
-    public List<Result> getResults() {
+    public List<Article> getResults() {
         return results;
     }
 

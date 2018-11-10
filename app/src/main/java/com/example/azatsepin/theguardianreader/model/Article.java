@@ -13,6 +13,7 @@ import java.util.Objects;
 @Entity
 public class Article {
 
+    @SerializedName("db_id")
     @PrimaryKey(autoGenerate = true)
     private long id;
     @SerializedName("id")
