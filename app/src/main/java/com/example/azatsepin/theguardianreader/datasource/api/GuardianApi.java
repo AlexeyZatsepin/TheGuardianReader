@@ -1,8 +1,8 @@
 package com.example.azatsepin.theguardianreader.datasource.api;
 
-import com.example.azatsepin.theguardianreader.model.ListResponse;
-import com.example.azatsepin.theguardianreader.model.SingleResponse;
-import com.example.azatsepin.theguardianreader.model.ResponseWrapper;
+import com.example.azatsepin.theguardianreader.domain.ListResponse;
+import com.example.azatsepin.theguardianreader.domain.SingleResponse;
+import com.example.azatsepin.theguardianreader.domain.ResponseWrapper;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

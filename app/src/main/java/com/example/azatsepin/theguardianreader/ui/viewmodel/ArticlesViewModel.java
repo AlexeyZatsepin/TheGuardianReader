@@ -1,4 +1,4 @@
-package com.example.azatsepin.theguardianreader.viewmodel;
+package com.example.azatsepin.theguardianreader.ui.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -11,10 +11,10 @@ import android.support.annotation.NonNull;
 
 import com.example.azatsepin.theguardianreader.BuildConfig;
 import com.example.azatsepin.theguardianreader.ReaderApp;
+import com.example.azatsepin.theguardianreader.datasource.AsyncArticleRepository;
 import com.example.azatsepin.theguardianreader.datasource.api.GuardianApi;
-import com.example.azatsepin.theguardianreader.datasource.ArticleDao;
 import com.example.azatsepin.theguardianreader.datasource.api.NetworkDataSource;
-import com.example.azatsepin.theguardianreader.model.Article;
+import com.example.azatsepin.theguardianreader.domain.Article;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -22,16 +22,14 @@ import java.util.concurrent.Executors;
 public class ArticlesViewModel extends AndroidViewModel {
 
     private MutableLiveData<PagedList<Article>> networkArticles;
-    private MutableLiveData<List<Article>> pinnedArticles;
-    private MutableLiveData<List<Article>> savedArticles;
     private GuardianApi api;
-    private ArticleDao articleDao;
+    private AsyncArticleRepository repository;
 
     public ArticlesViewModel(@NonNull Application application) {
         super(application);
         ReaderApp app = (ReaderApp) application;
         api = app.getGuardianApi();
-        articleDao = app.getArticleDao();
+        repository = app.getRepository();
     }
 
     public LiveData<PagedList<Article>> getNetworkArticles() {
@@ -54,18 +52,10 @@ public class ArticlesViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Article>> getPinnedArticles() {
-        if (pinnedArticles == null) {
-            pinnedArticles = new MutableLiveData<>();
-            articleDao.getPinnedArticles().observe(getApplication(), pinnedArticles::postValue);
-        }
-        return pinnedArticles;
+        return repository.readAllPinned();
     }
 
     public LiveData<List<Article>> getSavedArticles() {
-        if (savedArticles == null) {
-            savedArticles = new MutableLiveData<>();
-            articleDao.getPinnedArticles().observe(getApplication(), savedArticles::postValue);
-        }
-        return savedArticles;
+        return repository.readAll();
     }
 }

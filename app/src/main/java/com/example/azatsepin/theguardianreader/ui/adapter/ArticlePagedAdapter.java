@@ -1,4 +1,4 @@
-package com.example.azatsepin.theguardianreader.adapter;
+package com.example.azatsepin.theguardianreader.ui.adapter;
 
 import android.arch.paging.PagedListAdapter;
 import android.support.annotation.NonNull;
@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.example.azatsepin.theguardianreader.R;
-import com.example.azatsepin.theguardianreader.model.Article;
+import com.example.azatsepin.theguardianreader.ReaderApp;
+import com.example.azatsepin.theguardianreader.domain.Article;
 import com.squareup.picasso.Picasso;
 
 public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedAdapter.ArticleViewHolder> {
@@ -41,11 +43,13 @@ public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedA
     public class ArticleViewHolder extends RecyclerView.ViewHolder {
         private TextView titleView;
         private ImageView imageView;
+        private ToggleButton button;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
             titleView = itemView.findViewById(R.id.primary_text);
             imageView = itemView.findViewById(R.id.media_image);
+            button = itemView.findViewById(R.id.action_save);
         }
 
         public void bind(Article article){
@@ -53,8 +57,8 @@ public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedA
             titleView.setText(article.getWebTitle());
             Picasso.get()
                     .load(article.getFields().getThumbnail())
-//                    .networkPolicy(NetworkPolicy.OFFLINE)
                     .into(imageView);
+            button.setOnClickListener(v -> ReaderApp.getInstance().getRepository().create(article));
         }
     }
 

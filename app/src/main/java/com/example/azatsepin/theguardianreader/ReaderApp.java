@@ -3,17 +3,18 @@ package com.example.azatsepin.theguardianreader;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
+import com.example.azatsepin.theguardianreader.datasource.AsyncArticleRepository;
 import com.example.azatsepin.theguardianreader.datasource.api.GuardianApi;
 import com.example.azatsepin.theguardianreader.datasource.AppDatabase;
-import com.example.azatsepin.theguardianreader.datasource.ArticleDao;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ReaderApp extends Application {
 
-    private ArticleDao articleDao;
+    private AsyncArticleRepository repository;
     private GuardianApi guardianApi;
+    private static ReaderApp app;
 
     @Override
     public void onCreate() {
@@ -29,14 +30,19 @@ public class ReaderApp extends Application {
                 getApplicationContext(),
                 AppDatabase.class)
                 .build();
-        articleDao = db.articleDao();
+        repository = new AsyncArticleRepository(db.articleDao());
+        app = this;
     }
 
-    public ArticleDao getArticleDao() {
-        return articleDao;
+    public AsyncArticleRepository getRepository() {
+        return repository;
     }
 
     public GuardianApi getGuardianApi() {
         return guardianApi;
+    }
+
+    public static ReaderApp getInstance() {
+        return app;
     }
 }

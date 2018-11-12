@@ -2,7 +2,7 @@ package com.example.azatsepin.theguardianreader.datasource;
 
 import android.os.AsyncTask;
 
-import com.example.azatsepin.theguardianreader.model.Article;
+import com.example.azatsepin.theguardianreader.domain.Article;
 
 public class DatabaseActionAsyncTask extends AsyncTask<Article, Void, Void> {
 

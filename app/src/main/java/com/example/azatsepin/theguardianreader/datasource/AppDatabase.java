@@ -3,7 +3,7 @@ package com.example.azatsepin.theguardianreader.datasource;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 
-import com.example.azatsepin.theguardianreader.model.Article;
+import com.example.azatsepin.theguardianreader.domain.Article;
 
 @Database(entities = {Article.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {

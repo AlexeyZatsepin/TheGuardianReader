@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.azatsepin.theguardianreader.BuildConfig;
-import com.example.azatsepin.theguardianreader.model.Article;
-import com.example.azatsepin.theguardianreader.model.ListResponse;
-import com.example.azatsepin.theguardianreader.model.ResponseWrapper;
+import com.example.azatsepin.theguardianreader.domain.Article;
+import com.example.azatsepin.theguardianreader.domain.ListResponse;
+import com.example.azatsepin.theguardianreader.domain.ResponseWrapper;
 
 import retrofit2.Call;
 import retrofit2.Callback;

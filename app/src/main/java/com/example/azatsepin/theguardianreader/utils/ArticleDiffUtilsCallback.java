@@ -2,7 +2,7 @@ package com.example.azatsepin.theguardianreader.utils;
 
 import android.support.v7.util.DiffUtil;
 
-import com.example.azatsepin.theguardianreader.model.Article;
+import com.example.azatsepin.theguardianreader.domain.Article;
 
 public class ArticleDiffUtilsCallback extends DiffUtil.ItemCallback<Article> {
 

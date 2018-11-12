@@ -4,7 +4,7 @@ import android.arch.persistence.room.Room;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.azatsepin.theguardianreader.model.Article;
+import com.example.azatsepin.theguardianreader.domain.Article;
 import com.example.azatsepin.theguardianreader.datasource.AppDatabase;
 import com.example.azatsepin.theguardianreader.datasource.ArticleDao;
 

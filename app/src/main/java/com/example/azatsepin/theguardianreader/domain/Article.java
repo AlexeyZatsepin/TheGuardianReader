@@ -1,5 +1,5 @@
 
-package com.example.azatsepin.theguardianreader.model;
+package com.example.azatsepin.theguardianreader.domain;
 
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;

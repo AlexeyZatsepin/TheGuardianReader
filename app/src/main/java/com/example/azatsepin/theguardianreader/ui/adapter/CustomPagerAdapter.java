@@ -1,11 +1,11 @@
-package com.example.azatsepin.theguardianreader.adapter;
+package com.example.azatsepin.theguardianreader.ui.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.azatsepin.theguardianreader.SavedFragment;
-import com.example.azatsepin.theguardianreader.SearchFragment;
+import com.example.azatsepin.theguardianreader.ui.fragments.SavedFragment;
+import com.example.azatsepin.theguardianreader.ui.fragments.SearchFragment;
 
 import java.util.ArrayList;
 import java.util.List;

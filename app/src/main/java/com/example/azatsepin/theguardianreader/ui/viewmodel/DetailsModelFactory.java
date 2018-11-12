@@ -1,10 +1,10 @@
-package com.example.azatsepin.theguardianreader.viewmodel;
+package com.example.azatsepin.theguardianreader.ui.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import com.example.azatsepin.theguardianreader.model.Article;
+import com.example.azatsepin.theguardianreader.domain.Article;
 
 public class DetailsModelFactory extends ViewModelProvider.NewInstanceFactory {
 

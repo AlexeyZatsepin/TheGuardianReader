@@ -1,5 +1,5 @@
 
-package com.example.azatsepin.theguardianreader.model;
+package com.example.azatsepin.theguardianreader.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;
