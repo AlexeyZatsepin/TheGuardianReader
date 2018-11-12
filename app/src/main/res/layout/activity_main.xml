@@ -12,15 +12,6 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <android.support.v7.widget.Toolbar
-        android:layout_gravity="top"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark" />
-
     <android.support.design.widget.BottomNavigationView
         android:layout_gravity="bottom"
         android:id="@+id/bottom_navigation"
@@ -29,7 +20,7 @@
         android:background="@color/colorPrimary"
         app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@android:color/white"
-        app:itemTextColor="@android:color/white"
+        app:itemTextColor="@drawable/dr_nav_text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

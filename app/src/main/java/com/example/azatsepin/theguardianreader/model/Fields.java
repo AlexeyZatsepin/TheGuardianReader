@@ -1,10 +1,13 @@
 
 package com.example.azatsepin.theguardianreader.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Fields {
+public class Fields implements Parcelable {
 
     @SerializedName("headline")
     @Expose
@@ -84,6 +87,49 @@ public class Fields {
     @SerializedName("showAffiliateLinks")
     @Expose
     private String showAffiliateLinks;
+
+    public Fields(){}
+
+    protected Fields(Parcel in) {
+        headline = in.readString();
+        standfirst = in.readString();
+        trailText = in.readString();
+        byline = in.readString();
+        main = in.readString();
+        body = in.readString();
+        newspaperPageNumber = in.readString();
+        wordcount = in.readString();
+        firstPublicationDate = in.readString();
+        isInappropriateForSponsorship = in.readString();
+        isPremoderated = in.readString();
+        lastModified = in.readString();
+        newspaperEditionDate = in.readString();
+        productionOffice = in.readString();
+        publication = in.readString();
+        shortUrl = in.readString();
+        shouldHideAdverts = in.readString();
+        showInRelatedContent = in.readString();
+        thumbnail = in.readString();
+        legallySensitive = in.readString();
+        sensitive = in.readString();
+        lang = in.readString();
+        bodyText = in.readString();
+        charCount = in.readString();
+        shouldHideReaderRevenue = in.readString();
+        showAffiliateLinks = in.readString();
+    }
+
+    public static final Creator<Fields> CREATOR = new Creator<Fields>() {
+        @Override
+        public Fields createFromParcel(Parcel in) {
+            return new Fields(in);
+        }
+
+        @Override
+        public Fields[] newArray(int size) {
+            return new Fields[size];
+        }
+    };
 
     public String getHeadline() {
         return headline;
@@ -293,4 +339,38 @@ public class Fields {
         this.showAffiliateLinks = showAffiliateLinks;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(headline);
+        dest.writeString(standfirst);
+        dest.writeString(trailText);
+        dest.writeString(byline);
+        dest.writeString(main);
+        dest.writeString(body);
+        dest.writeString(newspaperPageNumber);
+        dest.writeString(wordcount);
+        dest.writeString(firstPublicationDate);
+        dest.writeString(isInappropriateForSponsorship);
+        dest.writeString(isPremoderated);
+        dest.writeString(lastModified);
+        dest.writeString(newspaperEditionDate);
+        dest.writeString(productionOffice);
+        dest.writeString(publication);
+        dest.writeString(shortUrl);
+        dest.writeString(shouldHideAdverts);
+        dest.writeString(showInRelatedContent);
+        dest.writeString(thumbnail);
+        dest.writeString(legallySensitive);
+        dest.writeString(sensitive);
+        dest.writeString(lang);
+        dest.writeString(bodyText);
+        dest.writeString(charCount);
+        dest.writeString(shouldHideReaderRevenue);
+        dest.writeString(showAffiliateLinks);
+    }
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.azatsepin.theguardianreader.api.GuardianApi;
+import com.example.azatsepin.theguardianreader.datasource.api.GuardianApi;
 import com.example.azatsepin.theguardianreader.model.ListResponse;
 import com.example.azatsepin.theguardianreader.model.ResponseWrapper;
 import com.example.azatsepin.theguardianreader.model.SingleResponse;

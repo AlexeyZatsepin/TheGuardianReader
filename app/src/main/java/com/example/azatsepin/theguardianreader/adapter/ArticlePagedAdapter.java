@@ -14,9 +14,11 @@ import com.example.azatsepin.theguardianreader.R;
 import com.example.azatsepin.theguardianreader.model.Article;
 import com.squareup.picasso.Picasso;
 
-public class ArticleAdapter extends PagedListAdapter<Article, ArticleAdapter.ArticleViewHolder> {
+public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedAdapter.ArticleViewHolder> {
 
-    public ArticleAdapter(DiffUtil.ItemCallback<Article> diffUtilCallback) {
+    private OnArticleClickListener listener;
+
+    public ArticlePagedAdapter(DiffUtil.ItemCallback<Article> diffUtilCallback) {
         super(diffUtilCallback);
     }
 
@@ -32,6 +34,10 @@ public class ArticleAdapter extends PagedListAdapter<Article, ArticleAdapter.Art
         holder.bind(getItem(position));
     }
 
+    public void addItemClickListener(OnArticleClickListener listener) {
+        this.listener = listener;
+    }
+
     public class ArticleViewHolder extends RecyclerView.ViewHolder {
         private TextView titleView;
         private ImageView imageView;
@@ -43,6 +49,7 @@ public class ArticleAdapter extends PagedListAdapter<Article, ArticleAdapter.Art
         }
 
         public void bind(Article article){
+            itemView.setOnClickListener(v -> listener.onClick(article, imageView));
             titleView.setText(article.getWebTitle());
             Picasso.get()
                     .load(article.getFields().getThumbnail())

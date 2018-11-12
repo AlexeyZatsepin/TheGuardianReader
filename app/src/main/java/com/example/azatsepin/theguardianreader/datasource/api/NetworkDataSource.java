@@ -1,11 +1,10 @@
-package com.example.azatsepin.theguardianreader.datasource;
+package com.example.azatsepin.theguardianreader.datasource.api;
 
 import android.arch.paging.PositionalDataSource;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.azatsepin.theguardianreader.BuildConfig;
-import com.example.azatsepin.theguardianreader.api.GuardianApi;
 import com.example.azatsepin.theguardianreader.model.Article;
 import com.example.azatsepin.theguardianreader.model.ListResponse;
 import com.example.azatsepin.theguardianreader.model.ResponseWrapper;

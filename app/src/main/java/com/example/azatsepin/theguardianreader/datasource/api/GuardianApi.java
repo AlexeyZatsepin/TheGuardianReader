@@ -1,4 +1,4 @@
-package com.example.azatsepin.theguardianreader.api;
+package com.example.azatsepin.theguardianreader.datasource.api;
 
 import com.example.azatsepin.theguardianreader.model.ListResponse;
 import com.example.azatsepin.theguardianreader.model.SingleResponse;

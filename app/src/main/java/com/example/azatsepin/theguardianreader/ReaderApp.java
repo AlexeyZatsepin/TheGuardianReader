@@ -3,7 +3,7 @@ package com.example.azatsepin.theguardianreader;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
-import com.example.azatsepin.theguardianreader.api.GuardianApi;
+import com.example.azatsepin.theguardianreader.datasource.api.GuardianApi;
 import com.example.azatsepin.theguardianreader.datasource.AppDatabase;
 import com.example.azatsepin.theguardianreader.datasource.ArticleDao;
 

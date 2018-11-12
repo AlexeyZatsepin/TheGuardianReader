@@ -4,6 +4,8 @@ package com.example.azatsepin.theguardianreader.model;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 @Entity
-public class Article {
+public class Article implements Parcelable {
 
     @SerializedName("db_id")
     @PrimaryKey(autoGenerate = true)
@@ -53,6 +55,28 @@ public class Article {
     @SerializedName("pillarName")
     @Expose
     private String pillarName;
+
+    private boolean pinned;
+
+    public Article(){}
+
+    protected Article(Parcel in) {
+        id = in.readLong();
+        url = in.readString();
+        type = in.readString();
+        sectionId = in.readString();
+        sectionName = in.readString();
+        webPublicationDate = in.readString();
+        webTitle = in.readString();
+        webUrl = in.readString();
+        apiUrl = in.readString();
+        fields = in.readParcelable(Fields.class.getClassLoader());
+        byte tmpIsHosted = in.readByte();
+        isHosted = tmpIsHosted == 0 ? null : tmpIsHosted == 1;
+        pillarId = in.readString();
+        pillarName = in.readString();
+        pinned = in.readByte() != 0;
+    }
 
     public long getId() {
         return id;
@@ -158,6 +182,14 @@ public class Article {
         this.pillarName = pillarName;
     }
 
+    public boolean isPinned() {
+        return pinned;
+    }
+
+    public void setPinned(boolean pinned) {
+        this.pinned = pinned;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -181,4 +213,39 @@ public class Article {
     public int hashCode() {
         return Objects.hash(id, url, type, sectionId, sectionName, webPublicationDate, webTitle, webUrl, apiUrl, fields, isHosted, pillarId, pillarName);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(url);
+        dest.writeString(type);
+        dest.writeString(sectionId);
+        dest.writeString(sectionName);
+        dest.writeString(webPublicationDate);
+        dest.writeString(webTitle);
+        dest.writeString(webUrl);
+        dest.writeString(apiUrl);
+        dest.writeParcelable(fields,flags);
+        dest.writeByte((byte) (isHosted == null ? 0 : isHosted ? 1 : 2));
+        dest.writeString(pillarId);
+        dest.writeString(pillarName);
+        dest.writeByte((byte) (pinned ? 1 : 0));
+    }
+
+    public static final Creator<Article> CREATOR = new Creator<Article>() {
+        @Override
+        public Article createFromParcel(Parcel in) {
+            return new Article(in);
+        }
+
+        @Override
+        public Article[] newArray(int size) {
+            return new Article[size];
+        }
+    };
 }

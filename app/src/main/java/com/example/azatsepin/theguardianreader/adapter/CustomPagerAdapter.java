@@ -7,22 +7,30 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.example.azatsepin.theguardianreader.SavedFragment;
 import com.example.azatsepin.theguardianreader.SearchFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CustomPagerAdapter extends FragmentPagerAdapter {
-    enum Pages {
-        SEARCH, SAVED
-    }
+
+    private List<Fragment> fragments = new ArrayList<>();
 
     public CustomPagerAdapter(FragmentManager fm) {
         super(fm);
+        addFragment(new SearchFragment());
+        addFragment(new SavedFragment());
+    }
+
+    private void addFragment(Fragment fragment) {
+        fragments.add(fragment);
     }
 
     @Override
     public int getCount() {
-        return Pages.values().length;
+        return fragments.size();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return position == 0? new SearchFragment() : new SavedFragment();
+        return fragments.get(position);
     }
 }
