@@ -2,6 +2,7 @@ package com.example.azatsepin.theguardianreader;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 
 import com.example.azatsepin.theguardianreader.datasource.AsyncArticleRepository;
 import com.example.azatsepin.theguardianreader.datasource.api.GuardianApi;
@@ -32,6 +33,8 @@ public class ReaderApp extends Application {
                 .build();
         repository = new AsyncArticleRepository(db.articleDao());
         app = this;
+
+        startService(new Intent(getApplicationContext(), UpdateService.class));
     }
 
     public AsyncArticleRepository getRepository() {

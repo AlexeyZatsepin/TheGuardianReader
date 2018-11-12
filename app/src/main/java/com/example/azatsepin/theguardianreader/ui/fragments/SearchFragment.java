@@ -17,8 +17,8 @@ import com.example.azatsepin.theguardianreader.DetailsActivity;
 import com.example.azatsepin.theguardianreader.R;
 import com.example.azatsepin.theguardianreader.ui.adapter.ArticleAdapter;
 import com.example.azatsepin.theguardianreader.ui.adapter.ArticlePagedAdapter;
-import com.example.azatsepin.theguardianreader.utils.ArticleDiffUtilsCallback;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.ArticlesViewModel;
+import com.example.azatsepin.theguardianreader.utils.ArticleDiffUtilsCallback;
 
 public class SearchFragment extends Fragment {
 
@@ -36,7 +36,7 @@ public class SearchFragment extends Fragment {
         ArticlesViewModel model = ViewModelProviders.of(getActivity()).get(ArticlesViewModel.class);
 
         model.getPinnedArticles().observe(getActivity(), articles -> {
-            if (articles.size()>0){
+            if (articles.size() > 0) {
                 recyclerViewPinned.setVisibility(View.VISIBLE);
                 ArticleAdapter adapter = new ArticleAdapter(articles);
                 adapter.addItemClickListener((article, view) -> {
@@ -58,13 +58,8 @@ public class SearchFragment extends Fragment {
                     makeSceneTransitionAnimation(getActivity(), view, getString(R.string.activity_transition_animation));
             startActivity(intent, options.toBundle());
         });
-        model.getNetworkArticles().observe(getActivity(), articles -> {
-            if (articles.size()>0) {
-                adapter.submitList(articles);
-            } else {
-                textView.setVisibility(View.VISIBLE);
-            }
-        });
+        //                textView.setVisibility(View.VISIBLE);
+        model.getNetworkArticles().observe(getActivity(), adapter::submitList);
         recyclerView.setAdapter(adapter);
         return root;
     }

@@ -49,6 +49,7 @@ dependencies {
     implementation "android.arch.paging:runtime:1.0.1"
     implementation "android.arch.lifecycle:extensions:$arch_version"
     implementation "android.arch.lifecycle:viewmodel:$arch_version"
+    implementation "android.arch.work:work-runtime:1.0.0-alpha11"
     implementation "com.airbnb.android:lottie:2.6.0"
 
     testImplementation "junit:junit:4.12"
