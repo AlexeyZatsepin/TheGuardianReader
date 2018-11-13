@@ -2,16 +2,17 @@ package com.example.azatsepin.theguardianreader;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.text.Html;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.example.azatsepin.theguardianreader.datasource.AsyncArticleRepository;
 import com.example.azatsepin.theguardianreader.domain.Article;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.DetailsModelFactory;
@@ -27,18 +28,26 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
         FloatingActionButton fab = findViewById(R.id.fab_share);
-        LottieAnimationView progressBar = findViewById(R.id.animation_view);
+//        LottieAnimationView progressBar = findViewById(R.id.animation_view);
         Button pin = findViewById(R.id.pin);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ImageView imageView = findViewById(R.id.header_image);
+        TextView header = findViewById(R.id.header);
+        TextView pillar = findViewById(R.id.pillar);
+        TextView section = findViewById(R.id.section);
+        TextView date = findViewById(R.id.date);
+        TextView body = findViewById(R.id.body);
+        TextView weblink = findViewById(R.id.weblink);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
+
+//        progressBar.setVisibility(View.VISIBLE);
 
         AsyncArticleRepository repository = ((ReaderApp) getApplication()).getRepository();
 
@@ -67,9 +76,17 @@ public class DetailsActivity extends AppCompatActivity {
                     repository.update(article);
                 }
             });
+            header.setText(a.getWebTitle());
+            pillar.setText(a.getPillarName());
+            section.setText(a.getSectionName());
+            date.setText(a.getWebPublicationDate());
+            body.setText(Html.fromHtml(a.getFields().getBody()));
+            weblink.setOnClickListener(v -> {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(a.getWebUrl()));
+                startActivity(browserIntent);
+            });
 
-            progressBar.setVisibility(View.INVISIBLE);
-
+//            progressBar.setVisibility(View.GONE);
         });
     }
 }

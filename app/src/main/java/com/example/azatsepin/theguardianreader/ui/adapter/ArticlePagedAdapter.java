@@ -57,8 +57,11 @@ public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedA
             titleView.setText(article.getWebTitle());
             Picasso.get()
                     .load(article.getFields().getThumbnail())
+                    .fit()
+                    .centerCrop()
                     .into(imageView);
             button.setOnClickListener(v -> ReaderApp.getInstance().getRepository().create(article));
+            button.setChecked(article.isPinned() || article.getId()!=0);
         }
     }
 

@@ -1,33 +1,24 @@
 package com.example.azatsepin.theguardianreader;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
+import android.app.job.JobParameters;
+import android.app.job.JobService;
+import android.util.Log;
 
-import java.util.concurrent.TimeUnit;
+import static android.support.constraint.Constraints.TAG;
 
-import androidx.work.Constraints;
-import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
+public class UpdateService extends JobService {
 
-public class UpdateService extends Service {
-    @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public boolean onStartJob(JobParameters params) {
+        Log.i(TAG, "onStartJob: ");
+
+        ReaderApp.scheduleJob(getApplicationContext());
+        return true;
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Constraints constraints = new Constraints.Builder().setRequiredNetworkType
-                (NetworkType.CONNECTED).build();
-        PeriodicWorkRequest workRequest = new PeriodicWorkRequest.Builder(UpdateWorker.class, 15, TimeUnit.MINUTES)
-                .addTag(UpdateWorker.class.getSimpleName())
-                .setConstraints(constraints)
-                .build();
-        WorkManager.getInstance().enqueue(workRequest);
-        return super.onStartCommand(intent, flags, startId);
+    public boolean onStopJob(JobParameters params) {
+        return true;
     }
+
 }

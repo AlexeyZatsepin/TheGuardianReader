@@ -22,7 +22,14 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-        <service android:name=".UpdateService" />
+        <service android:name=".UpdateService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver android:name="StartServiceReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
