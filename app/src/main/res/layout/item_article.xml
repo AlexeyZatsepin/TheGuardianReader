@@ -38,6 +38,7 @@
             android:layout_height="0dp"
             android:scaleType="centerCrop"
             android:transitionName="@string/activity_transition_animation"
+            android:minWidth="200dp"
             app:layout_constraintDimensionRatio="1:0.7"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
