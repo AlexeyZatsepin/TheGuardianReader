@@ -2,9 +2,11 @@ package com.example.azatsepin.theguardianreader.datasource.api;
 
 import android.arch.paging.PositionalDataSource;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
 import com.example.azatsepin.theguardianreader.BuildConfig;
+import com.example.azatsepin.theguardianreader.ReaderApp;
 import com.example.azatsepin.theguardianreader.domain.Article;
 import com.example.azatsepin.theguardianreader.domain.ListResponse;
 import com.example.azatsepin.theguardianreader.domain.ResponseWrapper;
@@ -29,6 +31,7 @@ public class NetworkDataSource extends PositionalDataSource<Article> {
         api.search(BuildConfig.API_KEY, BuildConfig.DEFAULT_FIELDS,1).enqueue(new Callback<ResponseWrapper<ListResponse>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ListResponse>> call, Response<ResponseWrapper<ListResponse>> response) {
+                ReaderApp.getInstance().setLastCheckedTotal(response.body().getResponse().getTotal());
                 callback.onResult(response.body().getResponse().getResults(), 0);
             }
             @Override
@@ -43,6 +46,7 @@ public class NetworkDataSource extends PositionalDataSource<Article> {
         api.search(BuildConfig.API_KEY, BuildConfig.DEFAULT_FIELDS,params.startPosition/10).enqueue(new Callback<ResponseWrapper<ListResponse>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ListResponse>> call, Response<ResponseWrapper<ListResponse>> response) {
+                ReaderApp.getInstance().setLastCheckedTotal(response.body().getResponse().getTotal());
                 callback.onResult(response.body().getResponse().getResults());
             }
             @Override

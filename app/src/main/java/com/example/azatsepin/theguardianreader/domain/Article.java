@@ -2,8 +2,6 @@
 package com.example.azatsepin.theguardianreader.domain;
 
 import android.arch.persistence.room.Embedded;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,12 +10,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
-@Entity
 public class Article implements Parcelable {
 
-    @SerializedName("db_id")
-    @PrimaryKey(autoGenerate = true)
-    private long id;
     @SerializedName("id")
     @Expose
     private String url;
@@ -56,12 +50,9 @@ public class Article implements Parcelable {
     @Expose
     private String pillarName;
 
-    private boolean pinned;
-
     public Article(){}
 
     protected Article(Parcel in) {
-        id = in.readLong();
         url = in.readString();
         type = in.readString();
         sectionId = in.readString();
@@ -75,15 +66,19 @@ public class Article implements Parcelable {
         isHosted = tmpIsHosted == 0 ? null : tmpIsHosted == 1;
         pillarId = in.readString();
         pillarName = in.readString();
-        pinned = in.readByte() != 0;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    public static Article fromEntity(ArticleEntity article) {
+        Article entity = new Article();
+        entity.webTitle = article.getTitle();
+        entity.pillarName = article.getPillarName();
+        entity.sectionName = article.getSectionName();
+        entity.webPublicationDate = article.getDate();
+        entity.fields = new Fields();
+        entity.fields.setBody(article.getBody());
+        entity.fields.setThumbnail(article.getThumbnail());
+        entity.webUrl = article.getLink();
+        return entity;
     }
 
     public String getUrl() {
@@ -182,14 +177,6 @@ public class Article implements Parcelable {
         this.pillarName = pillarName;
     }
 
-    public boolean isPinned() {
-        return pinned;
-    }
-
-    public void setPinned(boolean pinned) {
-        this.pinned = pinned;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -211,7 +198,7 @@ public class Article implements Parcelable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, url, type, sectionId, sectionName, webPublicationDate, webTitle, webUrl, apiUrl, fields, isHosted, pillarId, pillarName);
+        return Objects.hash(url, type, sectionId, sectionName, webPublicationDate, webTitle, webUrl, apiUrl, fields, isHosted, pillarId, pillarName);
     }
 
     @Override
@@ -221,7 +208,6 @@ public class Article implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
         dest.writeString(url);
         dest.writeString(type);
         dest.writeString(sectionId);
@@ -234,7 +220,6 @@ public class Article implements Parcelable {
         dest.writeByte((byte) (isHosted == null ? 0 : isHosted ? 1 : 2));
         dest.writeString(pillarId);
         dest.writeString(pillarName);
-        dest.writeByte((byte) (pinned ? 1 : 0));
     }
 
     public static final Creator<Article> CREATOR = new Creator<Article>() {

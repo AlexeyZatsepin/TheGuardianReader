@@ -6,11 +6,7 @@ buildscript {
     ext.arch_version = '1.1.1'
     ext.retrofit_version = '2.4.0'
     ext.lottie_version = '2.6.0'
-    ext.gradle_version = '3.2.0'
-    ext.google_services_version = '4.0.1'
-    ext.gms_version = '16.0.1'
-    ext.graph_view = '0.4.2'
-    
+
     repositories {
         google()
         jcenter()

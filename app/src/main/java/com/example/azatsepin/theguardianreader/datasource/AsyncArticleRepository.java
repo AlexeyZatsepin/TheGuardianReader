@@ -3,10 +3,11 @@ package com.example.azatsepin.theguardianreader.datasource;
 import android.arch.lifecycle.LiveData;
 
 import com.example.azatsepin.theguardianreader.domain.Article;
+import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 
 import java.util.List;
 
-public class AsyncArticleRepository implements CrudRepository<Article> {
+public class AsyncArticleRepository implements CrudRepository<ArticleEntity> {
 
     private ArticleDao dao;
 
@@ -14,28 +15,28 @@ public class AsyncArticleRepository implements CrudRepository<Article> {
         this.dao = dao;
     }
 
-    public void create(Article article) {
+    public void create(ArticleEntity article) {
         new DatabaseActionAsyncTask(dao, DatabaseActionAsyncTask.Action.INSERT)
                 .execute(article);
     }
 
     @Override
-    public LiveData<List<Article>> readAll() {
+    public LiveData<List<ArticleEntity>> readAll() {
         return dao.getAll();
     }
 
-    public LiveData<List<Article>> readAllPinned() {
+    public LiveData<List<ArticleEntity>> readAllPinned() {
         return dao.getPinnedArticles();
     }
 
     @Override
-    public void update(Article article) {
+    public void update(ArticleEntity article) {
         new DatabaseActionAsyncTask(dao, DatabaseActionAsyncTask.Action.UPDATE)
                 .execute(article);
     }
 
     @Override
-    public void delete(Article article) {
+    public void delete(ArticleEntity article) {
         new DatabaseActionAsyncTask(dao, DatabaseActionAsyncTask.Action.DELETE)
                 .execute(article);
     }

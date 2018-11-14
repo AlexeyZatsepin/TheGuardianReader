@@ -1,10 +1,11 @@
 package com.example.azatsepin.theguardianreader.datasource;
 
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
 
-import com.example.azatsepin.theguardianreader.domain.Article;
+import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 
-public class DatabaseActionAsyncTask extends AsyncTask<Article, Void, Void> {
+public class DatabaseActionAsyncTask extends AsyncTask<ArticleEntity, Void, Void> {
 
     public enum Action {DELETE, INSERT, UPDATE}
 
@@ -14,15 +15,18 @@ public class DatabaseActionAsyncTask extends AsyncTask<Article, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(final Article ... params) {
+    protected Void doInBackground(final ArticleEntity... params) {
 
         switch (mAction){
             case DELETE:
                 mDao.delete(params[0]);
                 break;
-
             case INSERT:
-                mDao.insert(params[0]);
+                try {
+                    mDao.insert(params[0]);
+                } catch (SQLiteConstraintException exception) {
+
+                }
                 break;
             case UPDATE:
                 mDao.update(params[0]);

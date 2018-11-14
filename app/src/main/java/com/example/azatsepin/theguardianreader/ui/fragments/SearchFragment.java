@@ -15,13 +15,17 @@ import android.widget.TextView;
 
 import com.example.azatsepin.theguardianreader.DetailsActivity;
 import com.example.azatsepin.theguardianreader.R;
+import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 import com.example.azatsepin.theguardianreader.ui.adapter.ArticleAdapter;
 import com.example.azatsepin.theguardianreader.ui.adapter.ArticlePagedAdapter;
+import com.example.azatsepin.theguardianreader.ui.adapter.OnArticleClickListener;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.ArticlesViewModel;
 import com.example.azatsepin.theguardianreader.utils.ArticleDiffUtilsCallback;
 
-public class SearchFragment extends Fragment {
+import static com.example.azatsepin.theguardianreader.MainActivity.openDetailsActivity;
 
+public class SearchFragment extends Fragment {
+    private ArticleAdapter pinAdapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,29 +39,21 @@ public class SearchFragment extends Fragment {
 
         ArticlesViewModel model = ViewModelProviders.of(getActivity()).get(ArticlesViewModel.class);
 
+        OnArticleClickListener onArticleClickListener = (article, view) -> openDetailsActivity(getActivity(), view, article);
+
         model.getPinnedArticles().observe(getActivity(), articles -> {
-            if (articles.size() > 0) {
+            if (pinAdapter == null && articles.size() > 0) {
                 recyclerViewPinned.setVisibility(View.VISIBLE);
-                ArticleAdapter adapter = new ArticleAdapter(articles);
-                adapter.addItemClickListener((article, view) -> {
-                    Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                    intent.putExtra("article", article);
-                    ActivityOptionsCompat options = ActivityOptionsCompat.
-                            makeSceneTransitionAnimation(getActivity(), view, getString(R.string.activity_transition_animation));
-                    startActivity(intent, options.toBundle());
-                });
-                recyclerViewPinned.setAdapter(adapter);
+                pinAdapter = new ArticleAdapter(articles);
+                pinAdapter.addItemClickListener(onArticleClickListener);
+                recyclerViewPinned.setAdapter(pinAdapter);
+            } else if (articles.size() > 0){
+                pinAdapter.update(articles);
             }
         });
 
         ArticlePagedAdapter adapter = new ArticlePagedAdapter(new ArticleDiffUtilsCallback());
-        adapter.addItemClickListener((article, view) -> {
-            Intent intent = new Intent(getActivity(), DetailsActivity.class);
-            intent.putExtra("article", article);
-            ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation(getActivity(), view, getString(R.string.activity_transition_animation));
-            startActivity(intent, options.toBundle());
-        });
+        adapter.addItemClickListener(onArticleClickListener);
         //                textView.setVisibility(View.VISIBLE);
         model.getNetworkArticles().observe(getActivity(), adapter::submitList);
         recyclerView.setAdapter(adapter);

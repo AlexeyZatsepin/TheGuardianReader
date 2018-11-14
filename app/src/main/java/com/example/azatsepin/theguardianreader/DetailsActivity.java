@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.azatsepin.theguardianreader.datasource.AsyncArticleRepository;
 import com.example.azatsepin.theguardianreader.domain.Article;
+import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.DetailsModelFactory;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.DetailsViewModel;
 import com.squareup.picasso.Picasso;
@@ -51,20 +52,20 @@ public class DetailsActivity extends AppCompatActivity {
 
         AsyncArticleRepository repository = ((ReaderApp) getApplication()).getRepository();
 
-        Article article = Objects.requireNonNull(getIntent().getExtras()).getParcelable("article");
+        ArticleEntity article = Objects.requireNonNull(getIntent().getExtras()).getParcelable("article");
         DetailsViewModel viewModel = ViewModelProviders.of(this,
                 new DetailsModelFactory(article)).get(DetailsViewModel.class);
         viewModel.getArticle().observe(this, a -> {
-            toolbar.setTitle(a.getFields().getHeadline());
+            toolbar.setTitle(a.getTitle());
             Picasso.get()
-                    .load(a.getFields().getThumbnail())
+                    .load(a.getThumbnail())
                     .into(imageView);
 
             fab.setOnClickListener(v -> {
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(Intent.EXTRA_TEXT, article.getFields().getHeadline());
-                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, article.getWebUrl());
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, article.getTitle());
+                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, article.getLink());
                 startActivity(Intent.createChooser(sharingIntent, "Share using"));
             });
 
@@ -76,13 +77,13 @@ public class DetailsActivity extends AppCompatActivity {
                     repository.update(article);
                 }
             });
-            header.setText(a.getWebTitle());
+            header.setText(a.getTitle());
             pillar.setText(a.getPillarName());
             section.setText(a.getSectionName());
-            date.setText(a.getWebPublicationDate());
-            body.setText(Html.fromHtml(a.getFields().getBody()));
+            date.setText(a.getDate());
+            body.setText(Html.fromHtml(a.getBody()));
             weblink.setOnClickListener(v -> {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(a.getWebUrl()));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(a.getLink()));
                 startActivity(browserIntent);
             });
 

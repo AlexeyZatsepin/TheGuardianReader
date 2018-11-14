@@ -8,7 +8,7 @@ public class ArticleDiffUtilsCallback extends DiffUtil.ItemCallback<Article> {
 
     @Override
     public boolean areItemsTheSame(Article oldItem, Article newItem) {
-        return oldItem.getId() == newItem.getId();
+        return oldItem.getUrl().equals(newItem.getUrl());
     }
 
     @Override

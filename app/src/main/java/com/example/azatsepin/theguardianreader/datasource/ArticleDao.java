@@ -9,6 +9,7 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.example.azatsepin.theguardianreader.domain.Article;
+import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 
 import java.util.List;
 
@@ -17,24 +18,24 @@ import java.util.List;
 public interface ArticleDao {
 
     @Query("SELECT * FROM Article")
-    LiveData<List<Article>> getAll();
+    LiveData<List<ArticleEntity>> getAll();
 
     @Query("SELECT * FROM Article WHERE pinned == 1")
-    LiveData<List<Article>> getPinnedArticles();
+    LiveData<List<ArticleEntity>> getPinnedArticles();
 
     @Query("SELECT * FROM Article")
-    DataSource.Factory<Integer, Article> getAllPaged();
+    DataSource.Factory<Integer, ArticleEntity> getAllPaged();
 
     @Query("SELECT * FROM Article WHERE id = :id")
-    LiveData<Article> getById(long id);
+    LiveData<ArticleEntity> getById(long id);
 
     @Insert
-    long insert(Article employee);
+    long insert(ArticleEntity articleEntity);
 
     @Update
-    void update(Article employee);
+    void update(ArticleEntity articleEntity);
 
     @Delete
-    void delete(Article employee);
+    void delete(ArticleEntity articleEntity);
 
 }

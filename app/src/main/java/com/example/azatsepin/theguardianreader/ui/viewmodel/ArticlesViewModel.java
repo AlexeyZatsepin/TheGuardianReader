@@ -15,6 +15,7 @@ import com.example.azatsepin.theguardianreader.datasource.AsyncArticleRepository
 import com.example.azatsepin.theguardianreader.datasource.api.GuardianApi;
 import com.example.azatsepin.theguardianreader.datasource.api.NetworkDataSource;
 import com.example.azatsepin.theguardianreader.domain.Article;
+import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -51,11 +52,11 @@ public class ArticlesViewModel extends AndroidViewModel {
         return networkArticles;
     }
 
-    public LiveData<List<Article>> getPinnedArticles() {
+    public LiveData<List<ArticleEntity>> getPinnedArticles() {
         return repository.readAllPinned();
     }
 
-    public LiveData<List<Article>> getSavedArticles() {
+    public LiveData<List<ArticleEntity>> getSavedArticles() {
         return repository.readAll();
     }
 }

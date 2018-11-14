@@ -5,4 +5,7 @@
     <string name="activity_transition_animation">thumbnail</string>
     <string name="no_network_connection">No network connection.</string>
     <string name="to_view_saved_articles_you_need_to_add_smth">To view saved articles you need to add smth.</string>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="notification_title">New articles available</string>
+    <string name="notification_text">Check it in our app!</string>
 </resources>

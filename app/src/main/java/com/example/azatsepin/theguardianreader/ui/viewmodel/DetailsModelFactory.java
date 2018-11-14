@@ -5,12 +5,13 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.example.azatsepin.theguardianreader.domain.Article;
+import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 
 public class DetailsModelFactory extends ViewModelProvider.NewInstanceFactory {
 
-    private final Article article;
+    private final ArticleEntity article;
 
-    public DetailsModelFactory(Article article) {
+    public DetailsModelFactory(ArticleEntity article) {
         super();
         this.article = article;
     }

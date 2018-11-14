@@ -11,7 +11,7 @@ public interface CrudRepository<T> {
 
     LiveData<List<T>> readAll();
 
-    void update(Article article);
+    void update(T article);
 
-    void delete(Article article);
+    void delete(T article);
 }

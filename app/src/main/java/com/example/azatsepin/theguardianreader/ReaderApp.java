@@ -21,6 +21,7 @@ public class ReaderApp extends Application {
     private AsyncArticleRepository repository;
     private GuardianApi guardianApi;
     private static ReaderApp app;
+    private int lastCheckedTotal;
 
     @Override
     public void onCreate() {
@@ -32,9 +33,10 @@ public class ReaderApp extends Application {
 
         guardianApi = retrofit.create(GuardianApi.class);
 
-        AppDatabase db = Room.inMemoryDatabaseBuilder(
+        AppDatabase db = Room.databaseBuilder(
                 getApplicationContext(),
-                AppDatabase.class)
+                AppDatabase.class,
+                "articledb")
                 .build();
         repository = new AsyncArticleRepository(db.articleDao());
         app = ReaderApp.this;
@@ -50,6 +52,14 @@ public class ReaderApp extends Application {
 
     public static ReaderApp getInstance() {
         return app;
+    }
+
+    public void setLastCheckedTotal(int lastCheckedId) {
+        this.lastCheckedTotal = lastCheckedId;
+    }
+
+    public int getLastCheckedTotal() {
+        return lastCheckedTotal;
     }
 
     public static void scheduleJob(Context context) {

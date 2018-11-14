@@ -1,11 +1,16 @@
 package com.example.azatsepin.theguardianreader;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 import com.example.azatsepin.theguardianreader.ui.adapter.CustomPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,11 +29,11 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 item -> {
                     switch (item.getItemId()) {
-                        case R.id.action_bookmarks:
-                            viewPager.setCurrentItem(1);
-                            break;
                         case R.id.action_search:
                             viewPager.setCurrentItem(0);
+                            break;
+                        case R.id.action_bookmarks:
+                            viewPager.setCurrentItem(1);
                             break;
                     }
                     return true;
@@ -53,5 +58,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ReaderApp.scheduleJob(getApplicationContext());
+    }
+
+    public static void openDetailsActivity(Activity activity, View transition, ArticleEntity entity) {
+        Intent intent = new Intent(activity, DetailsActivity.class);
+        intent.putExtra("article", entity);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(activity, transition, activity.getString(R.string.activity_transition_animation));
+        activity.startActivity(intent, options.toBundle());
     }
 }

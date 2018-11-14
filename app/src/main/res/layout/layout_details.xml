@@ -9,9 +9,11 @@
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="28sp"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Title" />
@@ -23,6 +25,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textSize="24sp"
+        android:textColor="@android:color/white"
+        android:background="@drawable/dr_gradient_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header"
         tools:text="Sport" />
@@ -45,6 +49,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textSize="24sp"
+        android:textColor="@android:color/white"
+        android:background="@drawable/dr_gradient_button"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/header"
         tools:text="Football" />
@@ -52,16 +58,15 @@
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
-        android:layout_height="21dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="296dp"
         android:layout_marginTop="8dp"
         android:textSize="20sp"
-        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/section"
         tools:text="12.11.2018" />
 
     <TextView
@@ -69,22 +74,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/weblink"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/section" />
+        app:layout_constraintTop_toBottomOf="@+id/date" />
 
     <TextView
         android:id="@+id/weblink"
         android:layout_width="wrap_content"
-        android:layout_height="21dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="Open in browser"
+        android:text="@string/open_in_browser"
+        android:textColor="@android:color/white"
+        android:background="@drawable/dr_gradient_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
