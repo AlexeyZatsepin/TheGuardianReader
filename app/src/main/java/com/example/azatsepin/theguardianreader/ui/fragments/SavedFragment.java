@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.azatsepin.theguardianreader.MainActivity;
 import com.example.azatsepin.theguardianreader.R;
 import com.example.azatsepin.theguardianreader.ui.adapter.ArticleAdapter;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.ArticlesViewModel;
@@ -49,8 +50,13 @@ public class SavedFragment extends Fragment {
                 textView.setVisibility(View.VISIBLE);
             }
             animationView.setVisibility(View.GONE);
-
         });
+
+        ((MainActivity)getActivity()).addListener(layoutManager -> {
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.swapAdapter(adapter,false);
+        });
+
         return root;
     }
 }

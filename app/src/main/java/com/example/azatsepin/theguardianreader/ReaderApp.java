@@ -6,6 +6,7 @@ import android.app.job.JobScheduler;
 import android.arch.persistence.room.Room;
 import android.content.ComponentName;
 import android.content.Context;
+import android.os.StrictMode;
 
 import com.example.azatsepin.theguardianreader.datasource.AsyncArticleRepository;
 import com.example.azatsepin.theguardianreader.datasource.api.GuardianApi;
@@ -40,6 +41,21 @@ public class ReaderApp extends Application {
                 .build();
         repository = new AsyncArticleRepository(db.articleDao());
         app = ReaderApp.this;
+
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectAll()
+                    .penaltyLog()
+                    .build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .penaltyDeath()
+                    .build());
+        }
     }
 
     public AsyncArticleRepository getRepository() {

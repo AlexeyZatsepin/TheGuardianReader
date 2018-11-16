@@ -45,12 +45,14 @@ public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedA
 
     public class ArticleViewHolder extends RecyclerView.ViewHolder {
         private TextView titleView;
+        private TextView secondaryText;
         private ImageView imageView;
         private ToggleButton button;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
             titleView = itemView.findViewById(R.id.primary_text);
+            secondaryText = itemView.findViewById(R.id.sub_text);
             imageView = itemView.findViewById(R.id.media_image);
             button = itemView.findViewById(R.id.action_save);
         }
@@ -58,11 +60,13 @@ public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedA
         public void bind(ArticleEntity article){
             itemView.setOnClickListener(v -> listener.onClick(article, imageView));
             titleView.setText(article.getTitle());
+            secondaryText.setText(article.getDate());
             Picasso.get()
                     .load(article.getThumbnail())
                     .fit()
                     .centerCrop()
                     .into(imageView);
+            button.setOnCheckedChangeListener(null);
             button.setChecked(article.isPinned() || article.getId()!=0);
             button.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 AsyncArticleRepository repository = ReaderApp.getInstance().getRepository();

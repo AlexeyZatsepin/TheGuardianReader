@@ -1,19 +1,25 @@
 package com.example.azatsepin.theguardianreader.ui.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.azatsepin.theguardianreader.BuildConfig;
 import com.example.azatsepin.theguardianreader.DetailsActivity;
+import com.example.azatsepin.theguardianreader.MainActivity;
 import com.example.azatsepin.theguardianreader.R;
 import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 import com.example.azatsepin.theguardianreader.ui.adapter.ArticleAdapter;
@@ -57,6 +63,31 @@ public class SearchFragment extends Fragment {
         //                textView.setVisibility(View.VISIBLE);
         model.getNetworkArticles().observe(getActivity(), adapter::submitList);
         recyclerView.setAdapter(adapter);
+
+        ((MainActivity)getActivity()).addListener(layoutManager -> {
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.swapAdapter(adapter,false);
+        });
+
+//        ((MainActivity)getActivity()).setSearchListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+
+        getActivity().registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                adapter.notifyDataSetChanged();
+            }
+        }, new IntentFilter(BuildConfig.BROADCAST_ACTION));
+
         return root;
     }
 }

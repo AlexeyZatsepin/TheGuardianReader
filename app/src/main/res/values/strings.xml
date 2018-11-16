@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TheGuardianReader</string>
+    <string name="app_name">The Guardian Reader</string>
     <string name="saved">Saved</string>
     <string name="search">Search</string>
     <string name="activity_transition_animation">thumbnail</string>

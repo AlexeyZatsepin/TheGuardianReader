@@ -7,13 +7,29 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 import com.example.azatsepin.theguardianreader.ui.adapter.CustomPagerAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    public interface LayoutManagerChangeListener {
+        void onChange(RecyclerView.LayoutManager layoutManager);
+    }
+
+    private List<LayoutManagerChangeListener> listeners = new ArrayList<>();
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,23 +57,62 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private MenuItem prevMenuItem;
-            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
             @Override
             public void onPageSelected(int position) {
                 if (prevMenuItem != null)
                     prevMenuItem.setChecked(false);
-                else
+                else {
                     bottomNavigationView.getMenu().getItem(0).setChecked(false);
+                }
 
                 bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottomNavigationView.getMenu().getItem(position);
             }
 
-            @Override public void onPageScrollStateChanged(int state) { }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
         });
 
         ReaderApp.scheduleJob(getApplicationContext());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        MenuItem search = menu.findItem(R.id.menu_search);
+        searchView = (SearchView) search.getActionView();
+        searchView.setQueryHint("Enter Text");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_change_layout:
+                for (LayoutManagerChangeListener listener: listeners) {
+                    listener.onChange(item.isChecked()? new LinearLayoutManager(getApplicationContext()) : new GridLayoutManager(getApplicationContext(),2));
+                }
+                item.setIcon(item.isChecked()? R.drawable.ic_format_list_bulleted : R.drawable.ic_grid_large);
+                item.setChecked(!item.isChecked());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    public void addListener(LayoutManagerChangeListener listener) {
+        this.listeners.add(listener);
+    }
+
+    public void setSearchListener(SearchView.OnQueryTextListener listener) {
+        searchView.setOnQueryTextListener(listener);
     }
 
     public static void openDetailsActivity(Activity activity, View transition, ArticleEntity entity) {

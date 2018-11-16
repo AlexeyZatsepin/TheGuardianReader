@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.azatsepin.theguardianreader"
         minSdkVersion 23
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -14,6 +14,7 @@ android {
         buildConfigField "String", 'API_URL', '"https://content.guardianapis.com"'
         buildConfigField "String", 'DEFAULT_FIELDS', '"all"'
         buildConfigField "int", 'DEFAULT_PAGE_SIZE', '10'
+        buildConfigField "String", 'BROADCAST_ACTION', '"azatsepin.theguardianreader"'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -48,6 +49,7 @@ dependencies {
     implementation "android.arch.lifecycle:viewmodel:$arch_version"
     implementation "android.arch.work:work-runtime:1.0.0-alpha11"
     implementation "com.airbnb.android:lottie:2.6.0"
+    implementation 'com.google.android:flexbox:1.1.0'
 
     testImplementation "junit:junit:4.12"
     androidTestImplementation "com.android.support.test:runner:1.0.2"

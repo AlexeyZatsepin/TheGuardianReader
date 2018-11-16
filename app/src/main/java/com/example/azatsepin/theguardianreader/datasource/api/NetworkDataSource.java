@@ -28,7 +28,7 @@ public class NetworkDataSource extends PositionalDataSource<Article> {
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<Article> callback) {
         Log.d(TAG, "loadInitial, requestedStartPosition = " + params.requestedStartPosition +
                 ", requestedLoadSize = " + params.requestedLoadSize);
-        api.search(BuildConfig.API_KEY, BuildConfig.DEFAULT_FIELDS,1).enqueue(new Callback<ResponseWrapper<ListResponse>>() {
+        api.search(BuildConfig.API_KEY, BuildConfig.DEFAULT_FIELDS,"",1).enqueue(new Callback<ResponseWrapper<ListResponse>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ListResponse>> call, Response<ResponseWrapper<ListResponse>> response) {
                 ReaderApp.getInstance().setLastCheckedTotal(response.body().getResponse().getTotal());
@@ -43,7 +43,7 @@ public class NetworkDataSource extends PositionalDataSource<Article> {
     @Override
     public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<Article> callback) {
         Log.d(TAG, "loadRange, startPosition = " + params.startPosition + ", loadSize = " + params.loadSize);
-        api.search(BuildConfig.API_KEY, BuildConfig.DEFAULT_FIELDS,params.startPosition/10).enqueue(new Callback<ResponseWrapper<ListResponse>>() {
+        api.search(BuildConfig.API_KEY, BuildConfig.DEFAULT_FIELDS,"",params.startPosition/10).enqueue(new Callback<ResponseWrapper<ListResponse>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ListResponse>> call, Response<ResponseWrapper<ListResponse>> response) {
                 ReaderApp.getInstance().setLastCheckedTotal(response.body().getResponse().getTotal());

@@ -17,6 +17,7 @@ public interface GuardianApi {
     @GET("/search")
     Call<ResponseWrapper<ListResponse>> search(@Query("api-key") String key,
                                                @Query("show-fields") String fields,
+                                               @Query("q") String text,
                                                @Query("page") int page);
 
     @GET

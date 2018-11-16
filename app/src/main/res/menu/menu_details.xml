@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_pin"
+        android:checkable="true"
+        android:title="Pin"
+        android:icon="@drawable/ic_pin_outline"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_share"
+        android:title="Share"
+        android:icon="@drawable/ic_share"
+        app:showAsAction="always"/>
+    <item android:id="@+id/menu_save"
+        android:checkable="true"
+        android:title="Save"
+        android:icon="@drawable/ic_bookmark_plus_outline"
+        app:showAsAction="always"/>
+</menu>
