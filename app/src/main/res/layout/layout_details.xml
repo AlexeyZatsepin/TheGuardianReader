@@ -7,17 +7,18 @@
 
     <TextView
         android:id="@+id/header"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:textSize="24sp"
+        android:layout_marginTop="24dp"
+        android:textSize="22sp"
         android:textIsSelectable="true"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Title" />
+        tools:text="Title very very very very very very very very very very very very very very long" />
 
     <TextView
         android:id="@+id/pillar"

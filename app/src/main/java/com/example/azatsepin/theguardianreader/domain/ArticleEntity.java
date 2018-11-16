@@ -22,6 +22,7 @@ public class ArticleEntity implements Parcelable {
     private String link;
     private String thumbnail;
     private boolean pinned;
+    private boolean saved;
 
     public ArticleEntity() {
     }
@@ -35,6 +36,7 @@ public class ArticleEntity implements Parcelable {
         thumbnail = in.readString();
         link = in.readString();
         pinned = in.readByte() != 0;
+        saved = in.readByte() != 0;
     }
 
     public static ArticleEntity fromArticle(Article article) {
@@ -47,6 +49,7 @@ public class ArticleEntity implements Parcelable {
         entity.thumbnail = article.getFields().getThumbnail();
         entity.link = article.getWebUrl();
         entity.pinned = false;
+        entity.saved = false;
         return entity;
     }
 
@@ -132,6 +135,14 @@ public class ArticleEntity implements Parcelable {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 
     @Override

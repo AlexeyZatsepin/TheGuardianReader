@@ -63,6 +63,7 @@ public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedA
             secondaryText.setText(article.getDate());
             Picasso.get()
                     .load(article.getThumbnail())
+                    .placeholder(R.drawable.dr_drawer_background)
                     .fit()
                     .centerCrop()
                     .into(imageView);

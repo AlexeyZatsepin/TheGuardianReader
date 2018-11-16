@@ -9,7 +9,6 @@
         android:id="@+id/recyclerViewPinned"
         android:layout_width="wrap_content"
         android:layout_height="150dp"
-        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/divider"
@@ -21,17 +20,17 @@
         android:layout_height="1dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-        android:background="@android:color/darker_gray" />
+        android:background="@color/colorPrimaryDark" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:layout_editor_absoluteY="158dp"
         tools:listitem="@layout/item_article" />
 
     <com.airbnb.lottie.LottieAnimationView

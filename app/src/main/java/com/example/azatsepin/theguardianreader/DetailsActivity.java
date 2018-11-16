@@ -6,7 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -21,8 +23,6 @@ import com.example.azatsepin.theguardianreader.ui.viewmodel.DetailsModelFactory;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.DetailsViewModel;
 import com.squareup.picasso.Picasso;
 
-import java.util.Objects;
-
 public class DetailsActivity extends AppCompatActivity {
 
     private Menu menu;
@@ -34,19 +34,23 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+
+
         pinBtn = findViewById(R.id.fab_pin);
 //        LottieAnimationView progressBar = findViewById(R.id.animation_view);
-//        ToggleButton pin = findViewById(R.id.pin);
-//        ToggleButton save = findViewById(R.id.action_save);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        CollapsingToolbarLayout toolbarLayout = findViewById(R.id.collapsing_toolbar);
+
         ImageView imageView = findViewById(R.id.header_image);
-        TextView header = findViewById(R.id.header);
-        TextView pillar = findViewById(R.id.pillar);
-        TextView section = findViewById(R.id.section);
-        TextView date = findViewById(R.id.date);
-        TextView body = findViewById(R.id.body);
-        TextView weblink = findViewById(R.id.weblink);
+        TextView headerView = findViewById(R.id.header);
+        TextView pillarView = findViewById(R.id.pillar);
+        TextView sectionView = findViewById(R.id.section);
+        TextView dateView = findViewById(R.id.date);
+        TextView bodyView = findViewById(R.id.body);
+        TextView weblinkView = findViewById(R.id.weblink);
+
         AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
@@ -76,37 +80,38 @@ public class DetailsActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
 //        progressBar.setVisibility(View.VISIBLE);
+        Bundle bundle = getIntent().getExtras();
 
-        ArticleEntity article = Objects.requireNonNull(getIntent().getExtras()).getParcelable("article");
-        viewModel = ViewModelProviders.of(this,
-                new DetailsModelFactory(article)).get(DetailsViewModel.class);
-        viewModel.getArticle().observe(this, a -> {
-            if (a==null) return;
-            toolbar.setTitle(a.getTitle());
-            Picasso.get()
-                    .load(a.getThumbnail())
-                    .into(imageView);
+        if (bundle != null) {
+            bundle.setClassLoader(ArticleEntity.class.getClassLoader());
+            ArticleEntity article = bundle.getParcelable("article");
+            viewModel = ViewModelProviders.of(this,
+                    new DetailsModelFactory(article)).get(DetailsViewModel.class);
+            viewModel.getArticle().observe(this, a -> {
+                if (a==null) return;
+                toolbarLayout.setTitle(a.getTitle());
+                Picasso.get()
+                        .load(a.getThumbnail())
+                        .into(imageView);
 
-            pinBtn.setOnClickListener(v -> {
-                a.setPinned(!a.isPinned());
-                onSaveClick(a.isPinned());
-                setImagePin(a.isPinned());
-            });
+                pinBtn.setOnClickListener(v -> onPinClick());
 
-            setImagePin(a.isPinned());
-
-            header.setText(a.getTitle());
-            pillar.setText(a.getPillarName());
-            section.setText(a.getSectionName());
-            date.setText(a.getDate());
-            body.setText(Html.fromHtml(a.getBody()));
-            weblink.setOnClickListener(v -> {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(a.getLink()));
-                startActivity(browserIntent);
-            });
-
+                headerView.setText(a.getTitle());
+                pillarView.setText(a.getPillarName());
+                sectionView.setText(a.getSectionName());
+                dateView.setText(a.getDate());
+                bodyView.setText(Html.fromHtml(a.getBody()));
+                weblinkView.setOnClickListener(v -> {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(a.getLink()));
+                    startActivity(browserIntent);
+                });
 //            progressBar.setVisibility(View.GONE);
-        });
+            });
+        } else {
+            Snackbar.make(toolbarLayout, "Article not found", Snackbar.LENGTH_LONG).show();
+        }
+
+
     }
 
     @Override
@@ -115,16 +120,8 @@ public class DetailsActivity extends AppCompatActivity {
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_details, menu);
         hideOption(R.id.menu_pin);
+        updateIconsStatus(viewModel.getArticle().getValue());
         return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        viewModel.getArticle().observe(this, articleEntity -> {
-            menu.findItem(R.id.menu_save).setIcon(articleEntity.getId()!=0? R.drawable.ic_bookmark_check : R.drawable.ic_bookmark_plus_outline);
-            menu.findItem(R.id.menu_pin).setIcon(articleEntity.isPinned()? R.drawable.ic_pin : R.drawable.ic_pin_outline);
-        });
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -132,11 +129,10 @@ public class DetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
         ArticleEntity a = viewModel.getArticle().getValue();
         if (id == R.id.menu_save) {
-            onSaveClick(item.isChecked());
+            onSaveClick();
             return true;
         } else if (id == R.id.menu_pin) {
-            a.setPinned(!a.isPinned());
-            onSaveClick(a.isPinned());
+            onPinClick();
             return true;
         } else if (id == R.id.menu_share) {
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
@@ -150,24 +146,37 @@ public class DetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void onSaveClick(boolean isChecked){
+    private void onSaveClick(){
         AsyncArticleRepository repository = ((ReaderApp) getApplication()).getRepository();
         ArticleEntity a = viewModel.getArticle().getValue();
-        if (isChecked) {
+        a.setSaved(!a.isSaved());
+        if (a.isSaved()) {
             repository.create(a);
-        } else if(a.getId()!=0) {
-            repository.update(a);
         } else {
             repository.delete(a);
+            a.setPinned(false);
         }
+        updateIconsStatus(a);
+        Snackbar.make(pinBtn, a.isSaved() ? "Saved" : "Removed", Snackbar.LENGTH_LONG).show();
     }
 
-    private void setImagePin(boolean checked){
-        if (checked) {
-            pinBtn.setImageResource(R.drawable.ic_pin);
+    private void onPinClick(){
+        AsyncArticleRepository repository = ((ReaderApp) getApplication()).getRepository();
+        ArticleEntity a = viewModel.getArticle().getValue();
+        a.setPinned(!a.isPinned());
+
+        if (a.isSaved() && a.isPinned()) {
+            repository.update(a);
+        } else if (!a.isSaved() && a.isPinned()){
+            repository.create(a);
+            a.setSaved(true);
         } else {
-            pinBtn.setImageResource(R.drawable.ic_pin_outline);
+            repository.delete(a);
+            a.setSaved(false);
         }
+
+        updateIconsStatus(a);
+        Snackbar.make(pinBtn, a.isPinned() ? "Pinned" : "Unpinned", Snackbar.LENGTH_LONG).show();
     }
 
     private void hideOption(int id) {
@@ -178,5 +187,11 @@ public class DetailsActivity extends AppCompatActivity {
     private void showOption(int id) {
         MenuItem item = menu.findItem(id);
         item.setVisible(true);
+    }
+
+    private void updateIconsStatus(ArticleEntity a){
+        pinBtn.setImageResource(a.isPinned() ? R.drawable.ic_pin : R.drawable.ic_pin_outline);
+        menu.findItem(R.id.menu_save).setIcon(a.isSaved() ? R.drawable.ic_bookmark_check : R.drawable.ic_bookmark_plus_outline);
+        menu.findItem(R.id.menu_pin).setIcon(a.isPinned() ? R.drawable.ic_pin : R.drawable.ic_pin_outline);
     }
 }
