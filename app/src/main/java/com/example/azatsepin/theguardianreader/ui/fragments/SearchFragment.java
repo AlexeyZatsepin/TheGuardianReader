@@ -8,20 +8,16 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.azatsepin.theguardianreader.BuildConfig;
-import com.example.azatsepin.theguardianreader.DetailsActivity;
 import com.example.azatsepin.theguardianreader.MainActivity;
 import com.example.azatsepin.theguardianreader.R;
-import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 import com.example.azatsepin.theguardianreader.ui.adapter.ArticleAdapter;
 import com.example.azatsepin.theguardianreader.ui.adapter.ArticlePagedAdapter;
 import com.example.azatsepin.theguardianreader.ui.adapter.OnArticleClickListener;
@@ -32,16 +28,18 @@ import static com.example.azatsepin.theguardianreader.MainActivity.openDetailsAc
 
 public class SearchFragment extends Fragment {
     private ArticleAdapter pinAdapter;
+    private View divider;
+    private RecyclerView recyclerViewPinned;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
-        RecyclerView recyclerViewPinned = root.findViewById(R.id.recyclerViewPinned);
+        divider = root.findViewById(R.id.divider_pin);
+        recyclerViewPinned = root.findViewById(R.id.recyclerViewPinned);
         TextView textView = root.findViewById(R.id.empty_message);
-
-        recyclerViewPinned.setVisibility(View.GONE);
 
         ArticlesViewModel model = ViewModelProviders.of(getActivity()).get(ArticlesViewModel.class);
 
@@ -49,12 +47,15 @@ public class SearchFragment extends Fragment {
 
         model.getPinnedArticles().observe(getActivity(), articles -> {
             if (pinAdapter == null && articles.size() > 0) {
-                recyclerViewPinned.setVisibility(View.VISIBLE);
+                setPinnedBlockVisibility(View.VISIBLE);
                 pinAdapter = new ArticleAdapter(articles);
                 pinAdapter.addItemClickListener(onArticleClickListener);
+                pinAdapter.useForPinned();
                 recyclerViewPinned.setAdapter(pinAdapter);
             } else if (articles.size() > 0){
                 pinAdapter.update(articles);
+            } else if (articles.size() == 0) {
+                setPinnedBlockVisibility(View.GONE);
             }
         });
 
@@ -89,5 +90,10 @@ public class SearchFragment extends Fragment {
         }, new IntentFilter(BuildConfig.BROADCAST_ACTION));
 
         return root;
+    }
+
+    private void setPinnedBlockVisibility(int visibility) {
+        recyclerViewPinned.setVisibility(visibility);
+        divider.setVisibility(visibility);
     }
 }

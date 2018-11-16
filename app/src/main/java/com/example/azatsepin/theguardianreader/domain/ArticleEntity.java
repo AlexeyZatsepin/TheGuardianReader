@@ -44,7 +44,7 @@ public class ArticleEntity implements Parcelable {
         entity.title = article.getWebTitle();
         entity.pillarName = article.getPillarName();
         entity.sectionName = article.getSectionName();
-        entity.date = article.getWebPublicationDate();
+        entity.date = article.getFields().getLastModified();
         entity.body = article.getFields().getBody();
         entity.thumbnail = article.getFields().getThumbnail();
         entity.link = article.getWebUrl();

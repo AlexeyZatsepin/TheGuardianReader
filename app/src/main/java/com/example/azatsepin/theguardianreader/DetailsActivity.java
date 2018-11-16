@@ -2,6 +2,7 @@ package com.example.azatsepin.theguardianreader;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import com.example.azatsepin.theguardianreader.datasource.AsyncArticleRepository
 import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.DetailsModelFactory;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.DetailsViewModel;
+import com.example.azatsepin.theguardianreader.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -28,6 +30,7 @@ public class DetailsActivity extends AppCompatActivity {
     private Menu menu;
     private FloatingActionButton pinBtn;
     private DetailsViewModel viewModel;
+    private Matrix matrix;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class DetailsActivity extends AppCompatActivity {
 
 
         pinBtn = findViewById(R.id.fab_pin);
+        matrix = pinBtn.getImageMatrix();
 //        LottieAnimationView progressBar = findViewById(R.id.animation_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -99,7 +103,7 @@ public class DetailsActivity extends AppCompatActivity {
                 headerView.setText(a.getTitle());
                 pillarView.setText(a.getPillarName());
                 sectionView.setText(a.getSectionName());
-                dateView.setText(a.getDate());
+                dateView.setText(Utils.formatDate(a.getDate()));
                 bodyView.setText(Html.fromHtml(a.getBody()));
                 weblinkView.setOnClickListener(v -> {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(a.getLink()));
@@ -168,11 +172,11 @@ public class DetailsActivity extends AppCompatActivity {
         if (a.isSaved() && a.isPinned()) {
             repository.update(a);
         } else if (!a.isSaved() && a.isPinned()){
-            repository.create(a);
             a.setSaved(true);
+            repository.create(a);
         } else {
-            repository.delete(a);
             a.setSaved(false);
+            repository.delete(a);
         }
 
         updateIconsStatus(a);
@@ -191,6 +195,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void updateIconsStatus(ArticleEntity a){
         pinBtn.setImageResource(a.isPinned() ? R.drawable.ic_pin : R.drawable.ic_pin_outline);
+        pinBtn.setImageMatrix(matrix);
         menu.findItem(R.id.menu_save).setIcon(a.isSaved() ? R.drawable.ic_bookmark_check : R.drawable.ic_bookmark_plus_outline);
         menu.findItem(R.id.menu_pin).setIcon(a.isPinned() ? R.drawable.ic_pin : R.drawable.ic_pin_outline);
     }
