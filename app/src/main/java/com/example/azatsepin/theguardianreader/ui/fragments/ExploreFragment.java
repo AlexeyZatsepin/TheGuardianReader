@@ -1,6 +1,7 @@
 package com.example.azatsepin.theguardianreader.ui.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.arch.paging.PagedList;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,8 @@ import com.example.azatsepin.theguardianreader.ui.adapter.ArticlePagedAdapter;
 import com.example.azatsepin.theguardianreader.ui.adapter.OnArticleClickListener;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.ArticlesViewModel;
 import com.example.azatsepin.theguardianreader.utils.ArticleDiffUtilsCallback;
+
+import java.util.ArrayList;
 
 import static com.example.azatsepin.theguardianreader.MainActivity.openDetailsActivity;
 
@@ -76,8 +79,14 @@ public class ExploreFragment extends Fragment {
         adapter = new ArticlePagedAdapter(new ArticleDiffUtilsCallback());
         adapter.addItemClickListener(onArticleClickListener);
         model.getNetworkArticles().observe(activity, articles -> {
+            articles.addWeakCallback(new ArrayList<>(), new PagedList.Callback() {
+                @Override public void onChanged(int position, int count) { }
+                @Override public void onInserted(int position, int count) {
+                    progressBar.setVisibility(View.GONE);
+                }
+                @Override public void onRemoved(int position, int count) { }
+            });
             adapter.submitList(articles);
-            progressBar.setVisibility(View.GONE);
         });
         recyclerView.setAdapter(adapter);
 
