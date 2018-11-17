@@ -2,7 +2,6 @@ package com.example.azatsepin.theguardianreader.datasource.api;
 
 import android.arch.paging.PositionalDataSource;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
 import com.example.azatsepin.theguardianreader.BuildConfig;
@@ -19,16 +18,18 @@ public class NetworkDataSource extends PositionalDataSource<Article> {
 
     private final static String TAG = NetworkDataSource.class.getSimpleName();
     private GuardianApi api;
+    private String query;
 
-    public NetworkDataSource(GuardianApi api) {
+    public NetworkDataSource(GuardianApi api, String query) {
         this.api = api;
+        this.query = query;
     }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<Article> callback) {
         Log.d(TAG, "loadInitial, requestedStartPosition = " + params.requestedStartPosition +
                 ", requestedLoadSize = " + params.requestedLoadSize);
-        api.search(BuildConfig.API_KEY, BuildConfig.DEFAULT_FIELDS,1).enqueue(new Callback<ResponseWrapper<ListResponse>>() {
+        api.search(BuildConfig.API_KEY, BuildConfig.DEFAULT_FIELDS, BuildConfig.DEFAULT_TAGS, query,1).enqueue(new Callback<ResponseWrapper<ListResponse>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ListResponse>> call, Response<ResponseWrapper<ListResponse>> response) {
                 ReaderApp.getInstance().setLastCheckedTotal(response.body().getResponse().getTotal());
@@ -43,7 +44,7 @@ public class NetworkDataSource extends PositionalDataSource<Article> {
     @Override
     public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<Article> callback) {
         Log.d(TAG, "loadRange, startPosition = " + params.startPosition + ", loadSize = " + params.loadSize);
-        api.search(BuildConfig.API_KEY, BuildConfig.DEFAULT_FIELDS,params.startPosition/10).enqueue(new Callback<ResponseWrapper<ListResponse>>() {
+        api.search(BuildConfig.API_KEY, BuildConfig.DEFAULT_FIELDS,BuildConfig.DEFAULT_TAGS, query,params.startPosition/10).enqueue(new Callback<ResponseWrapper<ListResponse>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ListResponse>> call, Response<ResponseWrapper<ListResponse>> response) {
                 ReaderApp.getInstance().setLastCheckedTotal(response.body().getResponse().getTotal());

@@ -1,4 +1,4 @@
-package com.example.azatsepin.theguardianreader;
+package com.example.azatsepin.theguardianreader.database;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;

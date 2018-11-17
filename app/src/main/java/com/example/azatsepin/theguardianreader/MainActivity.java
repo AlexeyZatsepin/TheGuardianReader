@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 import com.example.azatsepin.theguardianreader.ui.adapter.CustomPagerAdapter;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<LayoutManagerChangeListener> listeners = new ArrayList<>();
-    private SearchView searchView;
+    private SearchView.OnQueryTextListener searchListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 item -> {
                     switch (item.getItemId()) {
-                        case R.id.action_search:
+                        case R.id.action_explore:
                             viewPager.setCurrentItem(0);
                             break;
                         case R.id.action_bookmarks:
@@ -91,8 +92,21 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         MenuItem search = menu.findItem(R.id.menu_search);
-        searchView = (SearchView) search.getActionView();
+        SearchView searchView = (SearchView) search.getActionView();
         searchView.setQueryHint("Enter Text");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                return searchListener.onQueryTextSubmit(s);
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return searchListener.onQueryTextSubmit(s);
+            }
+        });
         return true;
     }
 
@@ -116,12 +130,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setSearchListener(SearchView.OnQueryTextListener listener) {
-        searchView.setOnQueryTextListener(listener);
+        searchListener = listener;
     }
 
     public static void openDetailsActivity(Activity activity, View transition, ArticleEntity entity) {
         Intent intent = new Intent(activity, DetailsActivity.class);
-        intent.putExtra("article", entity);
+        intent.putExtra("article", entity.getTitle());
         ActivityOptionsCompat options = ActivityOptionsCompat.
                 makeSceneTransitionAnimation(activity, transition, activity.getString(R.string.activity_transition_animation));
         activity.startActivity(intent, options.toBundle());

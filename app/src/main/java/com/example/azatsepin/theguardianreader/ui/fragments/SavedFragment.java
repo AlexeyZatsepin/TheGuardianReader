@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,14 +30,16 @@ public class SavedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_saved, container, false);
 
-        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = root.findViewById(R.id.recyclerViewSaved);
         LottieAnimationView animationView = root.findViewById(R.id.animation_view);
         TextView textView = root.findViewById(R.id.empty_message);
         animationView.setVisibility(View.VISIBLE);
 
-        ArticlesViewModel model = ViewModelProviders.of(getActivity()).get(ArticlesViewModel.class);
+        MainActivity activity = (MainActivity) getActivity();
 
-        model.getSavedArticles().observe(getActivity(), articles -> {
+        ArticlesViewModel model = ViewModelProviders.of(activity).get(ArticlesViewModel.class);
+
+        model.getSavedArticles().observe(activity, articles -> {
             if (adapter == null && articles.size() > 0) {
                 textView.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -52,11 +55,30 @@ public class SavedFragment extends Fragment {
             animationView.setVisibility(View.GONE);
         });
 
-        ((MainActivity)getActivity()).addListener(layoutManager -> {
+        activity.addListener(layoutManager -> {
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.swapAdapter(adapter,false);
         });
 
         return root;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean visible){
+        super.setUserVisibleHint(visible);
+        if (visible && isResumed()){
+            ((MainActivity)getActivity()).setSearchListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    adapter.getFilter().filter(query);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
+        }
     }
 }

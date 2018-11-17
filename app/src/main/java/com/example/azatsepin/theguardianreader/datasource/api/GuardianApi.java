@@ -17,11 +17,13 @@ public interface GuardianApi {
     @GET("/search")
     Call<ResponseWrapper<ListResponse>> search(@Query("api-key") String key,
                                                @Query("show-fields") String fields,
+                                               @Query("show-tags") String tags,
                                                @Query("page") int page);
 
     @GET("/search")
     Call<ResponseWrapper<ListResponse>> search(@Query("api-key") String key,
                                                @Query("show-fields") String fields,
+                                               @Query("show-tags") String tags,
                                                @Query("q") String text,
                                                @Query("page") int page);
 

@@ -2,11 +2,14 @@ package com.example.azatsepin.theguardianreader.ui.adapter;
 
 import android.arch.paging.PagedListAdapter;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresPermission;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -14,15 +17,19 @@ import android.widget.ToggleButton;
 import com.example.azatsepin.theguardianreader.R;
 import com.example.azatsepin.theguardianreader.ReaderApp;
 import com.example.azatsepin.theguardianreader.datasource.AsyncArticleRepository;
+import com.example.azatsepin.theguardianreader.datasource.InMemoryArticleRepository;
 import com.example.azatsepin.theguardianreader.domain.Article;
 import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
+import com.example.azatsepin.theguardianreader.utils.RoundedCornersTransform;
 import com.example.azatsepin.theguardianreader.utils.Utils;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedAdapter.ArticleViewHolder> {
 
     private OnArticleClickListener listener;
     private ViewType viewType = ViewType.COMMON;
+    private Transformation transformation = new RoundedCornersTransform(10,0);
 
     enum ViewType {
         PINNED, COMMON
@@ -52,7 +59,8 @@ public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedA
 
     @Override
     public void onBindViewHolder(@NonNull ArticleViewHolder holder, int position) {
-        holder.bind(ArticleEntity.fromArticle(getItem(position)));
+        ArticleEntity entity = ArticleEntity.fromArticle(getItem(position));
+        checkInCacheAndBind(entity, holder);
     }
 
     public void addItemClickListener(OnArticleClickListener listener) {
@@ -61,6 +69,13 @@ public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedA
 
     public void useForPinned() {
         viewType = ViewType.PINNED;
+    }
+
+    protected void checkInCacheAndBind(ArticleEntity entity, ArticleViewHolder holder) {
+        InMemoryArticleRepository cache = ReaderApp.getInstance().getCache();
+        if (cache.read(entity.getTitle()) == null) cache.create(entity);
+        else entity = cache.read(entity.getTitle());
+        holder.bind(entity);
     }
 
     public class ArticleViewHolder extends RecyclerView.ViewHolder {
@@ -86,6 +101,7 @@ public class ArticlePagedAdapter extends PagedListAdapter<Article, ArticlePagedA
                     .placeholder(R.drawable.dr_drawer_background)
                     .fit()
                     .centerCrop()
+                    .transform(transformation)
                     .into(imageView);
             button.setOnCheckedChangeListener(null);
             button.setChecked(article.isSaved());

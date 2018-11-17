@@ -21,6 +21,11 @@ public class AsyncArticleRepository implements CrudRepository<ArticleEntity> {
     }
 
     @Override
+    public ArticleEntity read(String id) {
+        return dao.getById(Long.valueOf(id)).getValue();
+    }
+
+    @Override
     public LiveData<List<ArticleEntity>> readAll() {
         return dao.getAll();
     }

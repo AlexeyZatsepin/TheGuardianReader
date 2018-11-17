@@ -31,24 +31,26 @@ public class ArticlesViewModel extends AndroidViewModel {
         ReaderApp app = (ReaderApp) application;
         api = app.getGuardianApi();
         repository = app.getRepository();
+        networkArticles = new MutableLiveData<>();
     }
 
     public LiveData<PagedList<Article>> getNetworkArticles() {
-        if (networkArticles == null) {
-            networkArticles = new MutableLiveData<>();
-            PagedList.Config config = new PagedList.Config.Builder()
-                    .setEnablePlaceholders(false)
-                    .setPageSize(BuildConfig.DEFAULT_PAGE_SIZE)
-                    .build();
+        return getNetworkArticles(null);
+    }
 
-            NetworkDataSource networkDataSource = new NetworkDataSource(api);
+    public LiveData<PagedList<Article>> getNetworkArticles(String query) {
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setPageSize(BuildConfig.DEFAULT_PAGE_SIZE)
+                .build();
 
-            PagedList<Article> pagedList = new PagedList.Builder<>(networkDataSource, config)
-                    .setFetchExecutor(Executors.newSingleThreadExecutor())
-                    .setNotifyExecutor(command -> new Handler(Looper.getMainLooper()).post(command))
-                    .build();
-            networkArticles.postValue(pagedList);
-        }
+        NetworkDataSource networkDataSource = new NetworkDataSource(api, query);
+
+        PagedList<Article> pagedList = new PagedList.Builder<>(networkDataSource, config)
+                .setFetchExecutor(Executors.newSingleThreadExecutor())
+                .setNotifyExecutor(command -> new Handler(Looper.getMainLooper()).post(command))
+                .build();
+        networkArticles.postValue(pagedList);
         return networkArticles;
     }
 

@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.azatsepin.theguardianreader.ui.fragments.SavedFragment;
-import com.example.azatsepin.theguardianreader.ui.fragments.SearchFragment;
+import com.example.azatsepin.theguardianreader.ui.fragments.ExploreFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
 
     public CustomPagerAdapter(FragmentManager fm) {
         super(fm);
-        addFragment(new SearchFragment());
+        addFragment(new ExploreFragment());
         addFragment(new SavedFragment());
     }
 

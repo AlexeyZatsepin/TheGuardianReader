@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.StrictMode;
 
 import com.example.azatsepin.theguardianreader.datasource.AsyncArticleRepository;
+import com.example.azatsepin.theguardianreader.datasource.InMemoryArticleRepository;
 import com.example.azatsepin.theguardianreader.datasource.api.GuardianApi;
 import com.example.azatsepin.theguardianreader.datasource.AppDatabase;
 
@@ -20,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ReaderApp extends Application {
 
     private AsyncArticleRepository repository;
+    private InMemoryArticleRepository cache;
     private GuardianApi guardianApi;
     private static ReaderApp app;
     private int lastCheckedTotal;
@@ -40,6 +42,7 @@ public class ReaderApp extends Application {
                 "articledb")
                 .build();
         repository = new AsyncArticleRepository(db.articleDao());
+        cache = new InMemoryArticleRepository();
         app = ReaderApp.this;
 
         if (BuildConfig.DEBUG) {
@@ -68,6 +71,10 @@ public class ReaderApp extends Application {
 
     public static ReaderApp getInstance() {
         return app;
+    }
+
+    public InMemoryArticleRepository getCache() {
+        return cache;
     }
 
     public void setLastCheckedTotal(int lastCheckedId) {

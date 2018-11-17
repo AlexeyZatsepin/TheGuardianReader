@@ -21,6 +21,8 @@ public class ArticleEntity implements Parcelable {
     private String body;
     private String link;
     private String thumbnail;
+    private String author;
+    private String authorThumbnail;
     private boolean pinned;
     private boolean saved;
 
@@ -35,6 +37,8 @@ public class ArticleEntity implements Parcelable {
         body = in.readString();
         thumbnail = in.readString();
         link = in.readString();
+        author = in.readString();
+        authorThumbnail = in.readString();
         pinned = in.readByte() != 0;
         saved = in.readByte() != 0;
     }
@@ -48,8 +52,14 @@ public class ArticleEntity implements Parcelable {
         entity.body = article.getFields().getBody();
         entity.thumbnail = article.getFields().getThumbnail();
         entity.link = article.getWebUrl();
+        if (article.getTags() != null && !article.getTags().isEmpty()){
+            entity.author = article.getTags().get(0).getWebTitle();
+            entity.authorThumbnail = article.getTags().get(0).getBylineImageUrl();
+        } else {
+            entity.author = "The Guardian";
+        }
         entity.pinned = false;
-        entity.saved = false;
+        entity.saved = article.isSaved();
         return entity;
     }
 
@@ -145,6 +155,22 @@ public class ArticleEntity implements Parcelable {
         this.saved = saved;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getAuthorThumbnail() {
+        return authorThumbnail;
+    }
+
+    public void setAuthorThumbnail(String authorThumbnail) {
+        this.authorThumbnail = authorThumbnail;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -159,6 +185,8 @@ public class ArticleEntity implements Parcelable {
         dest.writeString(body);
         dest.writeString(thumbnail);
         dest.writeString(link);
+        dest.writeString(author);
+        dest.writeString(authorThumbnail);
         dest.writeByte((byte) (pinned ? 1 : 0));
     }
 

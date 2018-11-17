@@ -1,9 +1,10 @@
-package com.example.azatsepin.theguardianreader;
+package com.example.azatsepin.theguardianreader.network;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.example.azatsepin.theguardianreader.BuildConfig;
 import com.example.azatsepin.theguardianreader.datasource.api.GuardianApi;
 import com.example.azatsepin.theguardianreader.domain.ListResponse;
 import com.example.azatsepin.theguardianreader.domain.ResponseWrapper;

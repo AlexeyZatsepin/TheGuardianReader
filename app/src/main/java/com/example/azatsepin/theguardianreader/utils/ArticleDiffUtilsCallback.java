@@ -4,7 +4,7 @@ import android.support.v7.util.DiffUtil;
 
 import com.example.azatsepin.theguardianreader.domain.Article;
 
-public class ArticleDiffUtilsCallback extends DiffUtil.ItemCallback<Article> {
+public final class ArticleDiffUtilsCallback extends DiffUtil.ItemCallback<Article> {
 
     @Override
     public boolean areItemsTheSame(Article oldItem, Article newItem) {

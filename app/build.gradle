@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.azatsepin.theguardianreader"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "0.1"
@@ -13,6 +13,7 @@ android {
         buildConfigField "String", 'API_KEY', '"00accd3c-58fc-4e29-890f-ec712c49ccfd"'
         buildConfigField "String", 'API_URL', '"https://content.guardianapis.com"'
         buildConfigField "String", 'DEFAULT_FIELDS', '"all"'
+        buildConfigField "String", 'DEFAULT_TAGS', '"contributor"'
         buildConfigField "int", 'DEFAULT_PAGE_SIZE', '10'
         buildConfigField "String", 'BROADCAST_ACTION', '"azatsepin.theguardianreader"'
     }
@@ -47,11 +48,11 @@ dependencies {
     implementation "android.arch.paging:runtime:1.0.1"
     implementation "android.arch.lifecycle:extensions:$arch_version"
     implementation "android.arch.lifecycle:viewmodel:$arch_version"
-    implementation "android.arch.work:work-runtime:1.0.0-alpha11"
-    implementation "com.airbnb.android:lottie:2.6.0"
-    implementation 'com.google.android:flexbox:1.1.0'
+    implementation "com.airbnb.android:lottie:$lottie_version"
 
     testImplementation "junit:junit:4.12"
     androidTestImplementation "com.android.support.test:runner:1.0.2"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.2"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$expresso_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$expresso_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$expresso_version"
 }

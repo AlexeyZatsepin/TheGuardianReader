@@ -8,9 +8,11 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class Article implements Parcelable {
+public class Article {
 
     @SerializedName("id")
     @Expose
@@ -40,6 +42,9 @@ public class Article implements Parcelable {
     @Expose
     @Embedded
     private Fields fields;
+    @SerializedName("tags")
+    @Expose
+    private List<Tag> tags = null;
     @SerializedName("isHosted")
     @Expose
     private Boolean isHosted;
@@ -50,23 +55,9 @@ public class Article implements Parcelable {
     @Expose
     private String pillarName;
 
-    public Article(){}
+    private boolean saved;
 
-    protected Article(Parcel in) {
-        url = in.readString();
-        type = in.readString();
-        sectionId = in.readString();
-        sectionName = in.readString();
-        webPublicationDate = in.readString();
-        webTitle = in.readString();
-        webUrl = in.readString();
-        apiUrl = in.readString();
-        fields = in.readParcelable(Fields.class.getClassLoader());
-        byte tmpIsHosted = in.readByte();
-        isHosted = tmpIsHosted == 0 ? null : tmpIsHosted == 1;
-        pillarId = in.readString();
-        pillarName = in.readString();
-    }
+    public Article(){}
 
     public static Article fromEntity(ArticleEntity article) {
         Article entity = new Article();
@@ -78,6 +69,9 @@ public class Article implements Parcelable {
         entity.fields.setBody(article.getBody());
         entity.fields.setThumbnail(article.getThumbnail());
         entity.webUrl = article.getLink();
+        entity.saved = article.isSaved();
+        entity.tags = new ArrayList<>();
+        entity.tags.add(new Tag());
         return entity;
     }
 
@@ -177,6 +171,22 @@ public class Article implements Parcelable {
         this.pillarName = pillarName;
     }
 
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -200,37 +210,4 @@ public class Article implements Parcelable {
     public int hashCode() {
         return Objects.hash(url, type, sectionId, sectionName, webPublicationDate, webTitle, webUrl, apiUrl, fields, isHosted, pillarId, pillarName);
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(url);
-        dest.writeString(type);
-        dest.writeString(sectionId);
-        dest.writeString(sectionName);
-        dest.writeString(webPublicationDate);
-        dest.writeString(webTitle);
-        dest.writeString(webUrl);
-        dest.writeString(apiUrl);
-        dest.writeParcelable(fields,flags);
-        dest.writeByte((byte) (isHosted == null ? 0 : isHosted ? 1 : 2));
-        dest.writeString(pillarId);
-        dest.writeString(pillarName);
-    }
-
-    public static final Creator<Article> CREATOR = new Creator<Article>() {
-        @Override
-        public Article createFromParcel(Parcel in) {
-            return new Article(in);
-        }
-
-        @Override
-        public Article[] newArray(int size) {
-            return new Article[size];
-        }
-    };
 }

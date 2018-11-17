@@ -22,6 +22,7 @@ import com.example.azatsepin.theguardianreader.datasource.AsyncArticleRepository
 import com.example.azatsepin.theguardianreader.domain.ArticleEntity;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.DetailsModelFactory;
 import com.example.azatsepin.theguardianreader.ui.viewmodel.DetailsViewModel;
+import com.example.azatsepin.theguardianreader.utils.CircleTransform;
 import com.example.azatsepin.theguardianreader.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -48,12 +49,14 @@ public class DetailsActivity extends AppCompatActivity {
         CollapsingToolbarLayout toolbarLayout = findViewById(R.id.collapsing_toolbar);
 
         ImageView imageView = findViewById(R.id.header_image);
+        ImageView authorImageView = findViewById(R.id.author_image);
         TextView headerView = findViewById(R.id.header);
         TextView pillarView = findViewById(R.id.pillar);
         TextView sectionView = findViewById(R.id.section);
         TextView dateView = findViewById(R.id.date);
         TextView bodyView = findViewById(R.id.body);
         TextView weblinkView = findViewById(R.id.weblink);
+        TextView authorTextView = findViewById(R.id.author_name);
 
         AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -87,8 +90,8 @@ public class DetailsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            bundle.setClassLoader(ArticleEntity.class.getClassLoader());
-            ArticleEntity article = bundle.getParcelable("article");
+            String articleId = bundle.getString("article");
+            ArticleEntity article = ReaderApp.getInstance().getCache().read(articleId);
             viewModel = ViewModelProviders.of(this,
                     new DetailsModelFactory(article)).get(DetailsViewModel.class);
             viewModel.getArticle().observe(this, a -> {
@@ -98,9 +101,17 @@ public class DetailsActivity extends AppCompatActivity {
                         .load(a.getThumbnail())
                         .into(imageView);
 
+                Picasso.get()
+                        .load(a.getAuthorThumbnail())
+                        .fit()
+                        .placeholder(R.drawable.ic_user)
+                        .transform(new CircleTransform())
+                        .into(authorImageView);
+
                 pinBtn.setOnClickListener(v -> onPinClick());
 
                 headerView.setText(a.getTitle());
+                authorTextView.setText(a.getAuthor());
                 pillarView.setText(a.getPillarName());
                 sectionView.setText(a.getSectionName());
                 dateView.setText(Utils.formatDate(a.getDate()));
